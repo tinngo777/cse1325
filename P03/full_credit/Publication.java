@@ -13,7 +13,6 @@ public class Publication
     //Constructor 
     public Publication(String title, String author, int copyright, String loanedTo, LocalDate dueDate)
     {   
-        //Initialize fields
         this.title = title;
         this.author = author;
         this.copyright = copyright;
@@ -28,6 +27,8 @@ public class Publication
             throw new IllegalArgumentException("The year has to be between 1900 and current year");
         }
     }
+
+    //Methods 
 
     public void checkOut (String patron)
     {
