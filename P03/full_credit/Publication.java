@@ -31,7 +31,26 @@ public class Publication
 
     public void checkOut (String patron)
     {
-        
+        this.loanedTo = patron;
+        this.dueDate = LocalDate.now().plusDays(14);
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Book Title: ").append(title).append(", ");
+        sb.append("written by ").append(author).append(", copyright in ").append(copyright);
+        sb.append("\n");
+
+        if (loanedTo != null)
+        {
+            sb.append("It was loaned to ").append(loanedTo);   
+            sb.append(", due on ").append(dueDate);
+        }
+
+        return sb.toString();
     }
 
 }
