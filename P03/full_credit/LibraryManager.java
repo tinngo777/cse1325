@@ -35,5 +35,7 @@ public class LibraryManager {
 
         System.out.println(myLibrary.toString());
 
+        scanner.close();
+
     }
 }
