@@ -7,9 +7,9 @@ public class Video extends Publication {
     private Duration runtime;
     
     //Constructor
-    public Video(String title, String director, int copyright, String loanedTo, LocalDate dueDate, Duration runtime)
+    public Video(String title, String author, int copyright, String loanedTo, LocalDate dueDate, Duration runtime)
     {
-        super(title, director, copyright, loanedTo, dueDate);
+        super(title, author, copyright, loanedTo, dueDate);
         this.runtime = runtime;
     }
 
@@ -18,8 +18,8 @@ public class Video extends Publication {
     {
         StringBuilder sb = new StringBuilder(super.toString());
         
-        sb.append("Video ").append(title).append(" directed by ");
-        sb.append(director).append(", copyright in ").append(copyright);
+        sb.append("Video: ").append(title).append(", directed by ");
+        sb.append(author).append(", copyright in ").append(copyright);
         sb.append("\n");
 
         if (loanedTo != null)

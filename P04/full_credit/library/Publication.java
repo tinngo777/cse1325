@@ -1,14 +1,15 @@
 package library;
 import java.time.LocalDate;
+import java.time.Duration;
 
 public class Publication 
 {   
     //Declare private fields
-    private String title;
-    private String author;
-    private int copyright;
-    private String loanedTo;
-    private LocalDate dueDate;
+    protected String title;
+    protected String author;
+    protected int copyright;
+    protected String loanedTo;
+    protected LocalDate dueDate;
 
     //Constructor 
     public Publication(String title, String author, int copyright, String loanedTo, LocalDate dueDate)
@@ -55,3 +56,6 @@ public class Publication
     }
 
 }
+
+
+

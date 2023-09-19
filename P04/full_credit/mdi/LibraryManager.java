@@ -1,7 +1,10 @@
 package mdi;
 
 import library.Publication;
+import library.Video;
 import library.Library;
+
+import java.time.Duration;
 import java.util.Scanner;
 
 public class LibraryManager {
@@ -19,12 +22,24 @@ public class LibraryManager {
         myLibrary.addPublication(book2);
         myLibrary.addPublication(book3);
 
+        
+        //Add 3 videos to the system
+        Video video1 = new Video("Pacific Rim", "Guillermo del Toro", 2013, null, null, Duration.ofMinutes(132));
+        Video video2 = new Video("Interstellar", "Christopher Nolan", 2014, null, null, Duration.ofMinutes(169));
+        Video video3 = new Video("How'l Moving Castle", "Hayao Miyazaki", 2004, null, null, Duration.ofMinutes(119));
+
+        myLibrary.addVideo(video1);
+        myLibrary.addVideo(video2);
+        myLibrary.addVideo(video3);
+
+
         System.out.println(myLibrary.toString());
+
 
         //Ask for info
         Scanner scanner = new Scanner(System.in);
         
-        System.out.print("Which book to check out? ");
+        System.out.print("Which publication to check out? ");
         int publicationIndex = scanner.nextInt();
 
         scanner.nextLine();
