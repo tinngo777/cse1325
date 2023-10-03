@@ -53,6 +53,19 @@ import java.util.ArrayList;
                 + ": " + e.getMessage() + "\n");
         }
     }
+
+
+    public void checkIn(int publicationIndex)
+    {
+        try{
+            publications.get(publicationIndex).checkIn();
+        } catch (Exception e) {
+            System.err.println("Unable to check in publication #" + publicationIndex
+                + ": " + e.getMessage() + "\n");
+        }
+    }
+
+
     /**
      * Lists all publications in this library instance.
      *

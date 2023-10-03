@@ -10,19 +10,190 @@ import library.Library;
 import library.Publication;
 import library.Video;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+
 public class LibraryManager {
+    //field
+    private Library library;
+
+    //constructor
+    public LibraryManager(Library library)
+    {
+        this.library = library;
+    }
+
+    //listPublications
+    public void listPublications()
+    {
+        System.out.println(library);
+    }
+
+    //addPublication
+    public void addPublication()
+    {
+        try
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter publication title: ");
+            String title = reader.readLine();
+
+            System.out.print("Enter author: ");
+            String author = reader.readLine();
+
+            System.out.print("Enter copyright year: ");
+            int copyright = Integer.parseInt(reader.readLine());
+
+            Publication publication = new Publication(title, author, copyright);
+            library.addPublication(publication);
+            System.out.println("Publication added successfully.");
+        }
+        catch (IOException | NumberFormatException e)
+        {
+            System.err.println("Error when adding publication: " + e.getMessage());
+        }
+    }
+
+    //addVideo
+    public void addVideo() 
+    {
+        try 
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter video title: ");
+            String title = reader.readLine();
+
+            System.out.print("Enter producer: ");
+            String producer = reader.readLine();
+            
+            System.out.print("Enter copyright year: ");
+            int copyright = Integer.parseInt(reader.readLine());
+
+            System.out.print("Enter runtime (in minutes): ");
+            int runtime = Integer.parseInt(reader.readLine());
+
+            Video video = new Video(title, producer, copyright, runtime);
+            library.addPublication(video);
+            System.out.println("Video added successfully.");
+        } 
+        catch (IOException | NumberFormatException e) 
+        {
+            System.err.println("Error when adding video: " + e.getMessage());
+        }
+    }
+
+    //checkOut
+    public void checkOutPublication() 
+    {
+        try 
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter publication index to check out: ");
+            int publicationIndex = Integer.parseInt(reader.readLine());
+
+            System.out.print("Enter patron name: ");
+            String patron = reader.readLine();
+
+            library.checkOut(publicationIndex, patron);
+            System.out.println("Publication checked out successfully.");
+        } 
+        catch (IOException | NumberFormatException e) 
+        {
+            System.err.println("Error checking out publication: " + e.getMessage());
+        }
+    }
+
+    //checkIn
+    public void checkInPublication() 
+    {
+        try 
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter publication index to check in: ");
+            int publicationIndex = Integer.parseInt(reader.readLine());
+
+            library.checkIn(publicationIndex);
+            System.out.println("Publication checked in successfully.");
+        } 
+        catch (IOException | NumberFormatException e) 
+        {
+            System.err.println("Error checking in publication: " + e.getMessage());
+        }
+    }
+
+    //Main menu
+    public void run()
+    {
+        //set exit to false for while loop
+        boolean exit = false;
+
+        while (!exit)
+        {   
+            //Display menu
+            System.out.println("=========");
+            System.out.println("Main Menu");
+            System.out.println("=========");
+            System.out.println("");
+            System.out.println("The Library att Alexandria (Texas)");
+            System.out.println("");
+            System.out.println("0) Exit");
+            System.out.println("1) List");
+            System.out.println("2) Add Publication");
+            System.out.println("3) Add Video");
+            System.out.println("4) Check out");
+            System.out.println("5) Check in");
+            System.out.println("");
+
+
+            // Ask for menu option
+            System.out.print("Selection: ");
+            int select = Integer.parseInt(System.console().readLine());
+
+            //Switch to cases based on selection
+            switch (select)
+            {
+                case 0:
+                    exit = true;
+                    break;
+                case 1:
+                    listPublications();
+                    break;
+                case 2:
+                    addPublication();
+                    break;
+                case 3:
+                    addVideo();
+                    break;
+                case 4:
+                    checkOutPublication();
+                    break;
+                case 5:
+                    checkInPublication();
+                    break;
+                default:
+                    System.out.println("Invalid selection. Please try again");
+            }
+            
+        }
+
+    }
+
     public static void main(String[] args) {
-        Library library = new Library("The Library at Alexandria (Texas)");
-        library.addPublication(new Publication("The Cat in the Hat", "Dr. Suess", 1957));
-        library.addPublication(new Publication("The Firm", "John Grisham", 1992));
-        library.addPublication(new Publication("Foundation", "Isaac Asimov", 1951));
-        library.addPublication(new Video("Citizen Kane", "Orson Welles", 1941, 119));
-        library.addPublication(new Video("Star Wars", "George Lucas", 1977, 121));
-        library.addPublication(new Video("七人の侍 (Seven Samurai)", "Akira Kurosawa", 1954, 207));
-        System.out.println(library);
-        int selection = Integer.parseInt(System.console().readLine("\nWhich publication to check out? "));
-        String patron = System.console().readLine("Who are you? ");
-        library.checkOut(selection, patron);
-        System.out.println(library);
+        Library library = new Library("Hogwart Restricted Section");
+        library.addPublication(new Publication("Ticke to Childhood", "Nguyen Nhat Anh", 2008));
+        library.addPublication(new Publication("1Q84", "Haruki Murakami", 2009));
+        library.addPublication(new Publication("The Bro Code", "Barney Stinson", 2006));
+        library.addPublication(new Video("Pacific Rim", "Guillermo del Toro", 2013, 132));
+        library.addPublication(new Video("Memento", "Christopher Nolan", 2000, 113));
+        library.addPublication(new Video("The Song Remains the Same", "Led Zeppelin", 1976, 138));
+        
+        //Declare manager object
+        LibraryManager manager = new LibraryManager(library);
+        manager.run();
+
+        
+        
     }
 }
