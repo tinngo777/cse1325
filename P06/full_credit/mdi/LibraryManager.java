@@ -12,13 +12,14 @@ import library.Video;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 
 public class LibraryManager {
-    //field
+    //declare private field
     private Library library;
 
     //constructor
@@ -125,11 +126,65 @@ public class LibraryManager {
         }
     }
 
+    //saveLibrary method
+    public void saveLibrary()
+    {   
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try 
+        {
+            System.out.print("Enter your filename to save: ");
+            String filename = reader.readLine();
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename)))
+            {
+                library.save(writer);
+                System.out.println("Library saved successfully.");
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error: couldn't save file " + e.getMessage());
+            }
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error: couldn't read filename " +e.getMessage());
+        }
+    }
+
+
+    //openLibrary method
+    public void openLibrary()
+    {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try
+        {
+            System.out.print("Enter your filename to open: ");
+            String filename = reader.readLine();
+
+            try (BufferedReader br = new BufferedReader(new FileReader(filename)))
+            {
+                library = new Library(br);
+                System.out.println("Library opened successfully.");
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error: couldn't open file " + e.getMessage());
+            }
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error: couldn't read filename " + e.getMessage());
+        }
+    }
+
+
     //Main menu
     public void run()
     {
         //set exit to false for while loop
         boolean exit = false;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
 
         while (!exit)
         {   
@@ -146,40 +201,57 @@ public class LibraryManager {
             System.out.println("3) Add Video");
             System.out.println("4) Check out");
             System.out.println("5) Check in");
+            System.out.println("6) Save Library");
+            System.out.println("7) Open Library");
             System.out.println("");
 
 
             // Ask for menu option
             System.out.print("Selection: ");
-            int select = Integer.parseInt(System.console().readLine());
-
-            //Switch to cases based on selection
-            switch (select)
-            {
-                case 0:
-                    exit = true;
-                    break;
-                case 1:
-                    listPublications();
-                    break;
-                case 2:
-                    addPublication();
-                    break;
-                case 3:
-                    addVideo();
-                    break;
-                case 4:
-                    checkOutPublication();
-                    break;
-                case 5:
-                    checkInPublication();
-                    break;
-                default:
-                    System.out.println("Invalid selection. Please try again");
-            }
             
+            try 
+            {   
+                int select = Integer.parseInt(reader.readLine());
+                switch (select)
+                {
+                    case 0:
+                        exit = true;
+                        break;
+                    case 1:
+                        listPublications();
+                        break;
+                    case 2:
+                        addPublication();
+                        break;
+                    case 3:
+                        addVideo();
+                        break;
+                    case 4:
+                        checkOutPublication();
+                        break;
+                    case 5:
+                        checkInPublication();
+                        break;
+                    case 6:
+                        saveLibrary();
+                        break;
+                    case 7:
+                        openLibrary();
+                        break;
+                    default:
+                        System.out.println("Invalid selection. Please try again");
+                }   
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error reading output " + e.getMessage());
+                break;
+            }
+            catch (NumberFormatException nfe)
+            {
+                System.out.println("Invalid selection. Please try again.");
+            }
         }
-
     }
 
     public static void main(String[] args) {
@@ -194,8 +266,5 @@ public class LibraryManager {
         //Declare manager object
         LibraryManager manager = new LibraryManager(library);
         manager.run();
-
-        
-        
     }
 }
