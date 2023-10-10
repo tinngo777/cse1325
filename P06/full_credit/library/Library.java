@@ -7,15 +7,46 @@
 package library;
 
 import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 
  public class Library {
     
+    //Declare private fields
+    private String name;
+    private ArrayList<Publication> publications;
+
+
     //Create library instance
     public Library(String name) {
         this.name = name;
         this.publications = new ArrayList<>();
     }
+
+    //second constructor
+    public Library(BufferedReader br) throws IOException
+    {
+        this.name = br.readLine();
+        this.publications = new ArrayList<>();
+
+        int size = Integer.parseInt(br.readLine());
+        for (int i = 0; i < size; i++)
+        {
+            String type = br.readLine();
+            if ("video".equals(type))
+            {
+                publications.add(new Video(br));
+            }
+            else 
+            {
+                publications.add(new Publication(br));
+            }
+        }
+    }
+
+
     
     //Add publication to this instance
     public void addPublication(Publication publication) {
@@ -54,6 +85,26 @@ import java.util.ArrayList;
             sb.append("" + i + ") " + publications.get(i).toString() + "\n");
         return sb.toString();
     }
-    private String name;
-    private ArrayList<Publication> publications;
+
+    public void save(BufferedWriter bw) throws IOException
+    {
+        bw.write(name + "\n");
+        //size of ArrayList
+        bw.write(publications.size() + "\n");
+
+        //Write each Publication object to stream
+        for (Publication pub : publications)
+        {
+            if (pub instanceof Video)
+            {
+                bw.write("video\n");
+            }
+            else
+            {
+                bw.write("publication\n");
+            }
+            pub.save(bw);
+        }
+    }
+    
 }
