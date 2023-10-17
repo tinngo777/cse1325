@@ -1,7 +1,7 @@
 import java.util.Arrays;
-import java.util.Comparator;
+
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,8 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class WordSearch 
-{
+public class WordSearch {
     private static final String usage = "usage: java WordSearch [-h] [-v] [#threads] [#puzzles] [puzzleFile]...";
 
     public WordSearch(List<String> args) {
@@ -76,11 +75,39 @@ public class WordSearch
     // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     // Modify THIS method to divide up the puzzles among your threads!
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public void solve() {
+    public void solve() 
+    {
         System.err.println ("\n" + NUM_PUZZLES + " puzzles with " 
             + NUM_THREADS + " threads"); // Show the # puzzles and threads
-        // Solve all puzzles
-        solve(0, 0, NUM_PUZZLES);
+        int puzzlesPerThread = NUM_PUZZLES / NUM_THREADS;
+        List<Thread> threads = new ArrayList<>();
+
+        for (int i = 0; i < NUM_THREADS; i++)
+        {
+            final int threadID = i;
+            final int startPuzzle = i * puzzlesPerThread;
+            final int endPuzzle = (i == NUM_THREADS - 1) ? NUM_PUZZLES : startPuzzle + puzzlesPerThread;
+
+            Thread thread = new Thread(() -> 
+            {
+                solve(threadID, startPuzzle, endPuzzle);
+            });
+
+            threads.add(thread);
+            thread.start();
+        }
+
+        for (Thread thread : threads)
+        {
+            try
+            {
+                thread.join();
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void solve(int threadID, int firstPuzzle, int lastPuzzlePlusOne) {
@@ -89,38 +116,29 @@ public class WordSearch
             Puzzle p = puzzles.get(i);
             Solver solver = new Solver(p);
             for(String word : p.getWords()) {
-                try {
+                try 
+                {
                     Solution s = solver.solve(word);
-                    if(s == null) System.err.println("#### Failed to solve " + p.name() + " for '" + word + "'");
-                    else solutions.add(s);
+                    if(s == null) 
+                    {
+                        System.err.println("#### Failed to solve " + p.name() + " for '" + word + "'");
+                    }
+                    else 
+                    {
+                        synchronized(solutions)
+                        {
+                            solutions.add(s);
+                        }
+                    }
                 } catch (Exception e) {
                     System.err.println("#### Exception solving " + p.name() 
                         + " for " + word + ": " + e.getMessage());
                 }
             }
         }
-
+        
         // -------- All Puzzles Solved --------
     }
-
-
-    //Define SolutionComparator
-    private static class SolutionComparator implements Comparator<Solution>
-    {
-        @Override
-        public int compare(Solution s1, Solution s2)
-        {
-            int nameCompare = s1.name.compareTo(s2.name);
-            if (nameCompare != 0)
-            {
-                return nameCompare;
-            }
-            return s1.word.compareTo(s2.word);
-        }
-    }
-
-
-
     public void printSolutions() {
         for(Solution s : solutions)
             System.out.println(s);
@@ -136,5 +154,5 @@ public class WordSearch
     public final boolean verbose;
 
     private List<Puzzle> puzzles = new ArrayList<>();;
-    private Set<Solution> solutions = new TreeSet<>(new SolutionComparator());
+    private SortedSet<Solution> solutions = new TreeSet<>();
 }
