@@ -4,7 +4,7 @@
 #include <string>
 
 class Shape
-{
+{   //declare function
     public:
         virtual ~Shape() = default;
         virtual std::string name() const {return "Shape";}

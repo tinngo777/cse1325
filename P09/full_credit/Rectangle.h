@@ -9,6 +9,7 @@ class Rectangle : public Shape
         double height;
         double width;
     
+    //declare functions that override from Shape
     public:
         Rectangle (double height, double width);
         std::string name() const override;

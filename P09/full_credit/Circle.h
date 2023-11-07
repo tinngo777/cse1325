@@ -4,12 +4,13 @@
 #include "Shape.h"
 #include <string>
 
+
 class Circle : public Shape 
-{
+{   
     private:
         double radius;
 
-
+    //declare functions that override from Shape 
     public:
         Circle (double radius);
         std::string name() const override;
