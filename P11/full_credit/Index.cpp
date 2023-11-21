@@ -20,6 +20,7 @@ std::ostream& operator<<(std::ostream& os, const Index& idx)
             {
                 os << ", ";
             }
+            os << *it;
         }
         os << std::endl;
     }
